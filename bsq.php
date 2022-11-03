@@ -18,23 +18,7 @@ class Solver {
 		// $this->preprocess();
 		$this->process();
 	}
-
-	function preprocess () {
-		return;
-		$this->dGrid = [];
-		for ($x=0; $x < $this->gridWidth; $x++) {
-			$this->dGrid[$x] = [];
-			for ($y=0; $y < $this->gridHeight; $y++) {
-				// echo $this->rGrid[$y][$x];
-				$this->dGrid[$x][$y] = [
-					[
-						"s"
-					]
-				];
-			}
-		}
-	}
-
+	
 	// parse file
 	function getContent () {
 		$handle = fopen($this->filename, 'r');
@@ -91,6 +75,47 @@ class Solver {
 	}
 
 	function process () {
+		$biggestSquareWidth = 0;
+		$biggestSquareCoords = [0, 0];
+
+		$row = array_fill(0, $this->gridWidth, 0);
+		// $buffer = [0, 0];
+
+		for ($y = 0; $y < $this->gridHeight; $y++) {
+			$buffer = [0, 0]; 
+			for ($x = 0; $x < $this->gridWidth; $x++) { 
+				$buffer[0] = $buffer[1];
+				$buffer[1] = $row[$x];
+
+				$currChar = $this->rGrid[$y][$x];
+
+				$tz = $x == 0 ?	0 : $row[$x-1];
+
+				$row[$x] = ($currChar=='.') ? min($buffer[0], $buffer[1], $tz)+1 : 0;
+				// echo "$x / $y + $tz : '$currChar' \{$row[$x]}\n";
+				if ($row[$x] > $biggestSquareWidth) {
+					$biggestSquareWidth = $row[$x];
+					$biggestSquareCoords = [$x, $y];
+				}
+			}
+		}
+
+		// var_dump($biggestSquareWidth, $biggestSquareCoords);
+		// print_r($this->rGrid);
+
+		for ($y = 1+$biggestSquareCoords[1]-$biggestSquareWidth; $y <= $biggestSquareCoords[1]; $y++) {
+			// echo ("t: $y\n");
+			for ($x = 1+$biggestSquareCoords[0]-$biggestSquareWidth; $x <= $biggestSquareCoords[0]; $x++)
+				$this->rGrid[$y][$x] = 'x';
+		}
+		// print_r($this->rGrid);
+
+		foreach ($this->rGrid as $row) {
+			echo $row;
+		}
+	}
+
+	function process2 () {
 		//initiate loop
 		$biggestSquareWidth = 0;
 		$biggestSquareCoords = [0, 0];
@@ -175,26 +200,22 @@ class Solver {
 		// $this->tellMemory("process end");
 	}
 
-	function process2 () {
+	function process3 () {
 		//initiate loop
 		$biggestSquareWidth = 0;
 		$biggestSquareCoords = [0, 0];
-		// var_dump($this->headMax(2,3));
-		// exit();
+
 		for ($x=0; $x < $this->gridWidth - $biggestSquareWidth; $x++) {
 			for ($y=0; $y < $this->gridHeight - $biggestSquareWidth; $y++) {
 				if (($tmp = $this->headMax($x, $y)) > $biggestSquareWidth) {
 					$biggestSquareWidth = $tmp;
 					$biggestSquareCoords = [$y, $x];
 				}
-				echo $x.'/'.$y.' : '.$tmp.PHP_EOL;
-				// var_dump($tmp);
-				// return;
-				// echo $this->rGrid[$x][$y];
+				// echo $x.'/'.$y.' : '.$tmp.PHP_EOL;
 			}
-			echo "$x - $biggestSquareWidth".PHP_EOL;
+			// echo "$x - $biggestSquareWidth".PHP_EOL;
 		}
-		echo "result = $biggestSquareWidth width at ".$biggestSquareCoords[0].'/'.$biggestSquareCoords[1].PHP_EOL;
+		// echo "result = $biggestSquareWidth width at ".$biggestSquareCoords[0].'/'.$biggestSquareCoords[1].PHP_EOL;
 
 		echo implode($this->rGrid).PHP_EOL.PHP_EOL;
 		for ($i=$biggestSquareCoords[0]; $i < $biggestSquareCoords[0]+$biggestSquareWidth; $i++) { 
@@ -213,9 +234,7 @@ class Solver {
 		$currentMaxWidth = 1;
 		while ($this->onionLayerClear($x, $y, $currentMaxWidth))
 			$currentMaxWidth++;
-		// echo "Head $x/$y: $currentMaxWidth\n";
 		return $currentMaxWidth;
-		//
 	}
 
 	function onionLayerClear ($x, $y, $layer) : bool
@@ -252,11 +271,4 @@ class Solver {
 
 }
 
-
 $solver = new Solver($argc, $argv);
-
-
-
-
-
-
