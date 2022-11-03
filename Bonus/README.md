@@ -25,20 +25,18 @@ ooooo
 
 #### Installation
 
-Clone git
+Cloner le dépôt
 
 ```
 git clone git@github.com:thguerre/ALG_BSQ.git
 ```
 
-creation fichier 
-
+Créer un fichier (veillez à respecter le format d'Entrée présent ci-dessus !)
 ```
 nano/vim [fichier]
 ```
 
-execution
-
+Lancez le script
 ```
 php bsq.php [fichier]
 ```
@@ -55,24 +53,28 @@ Pour compiler la seconde version, il vous faudra aller dans le répertoire Bonus
 cd Bonus
 ```
 
-compiler
+Enfin, compiler
 ```
-gcc bsq.c -o bsq
+make
 ```
 
-execution
+Avant d'exécuter le binaire
 ```
 ./bsq [fichier]
 ```
 
 #### Utilisation des tests unitaires
 
-dezipper
+Extraire les grilles
 ```
-unzip mouli_maps
+unzip mouli_maps.zip
 ```
 
-utiliser
+Exécuter les tests
 ```
 sh tests_php.sh
+```
+OU
+```
+sh tests_c.sh
 ```
