@@ -32,9 +32,17 @@ git clone git@github.com:thguerre/ALG_BSQ.git
 ```
 
 Créer un fichier (veillez à respecter le format d'Entrée présent ci-dessus !)
+OU
+Générez un fichier automatiquement (voir ci-dessous)
 ```
 nano/vim [fichier]
 ```
+
+Générer un fichier automatiquement
+```
+perl generator.pl [largeur] [hauteur] [densité] > [fichier]
+```
+
 
 Lancez le script
 ```
